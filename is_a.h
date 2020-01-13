@@ -8,35 +8,32 @@
 #include <type_traits>
 
 template <
-	typename T,
-	template <typename...> class U 
+	typename,
+	template <typename...> typename
 >
 struct is_a {
 	static constexpr bool value = false;
 };
 
 template<
-	template <typename... T1> class T, 
-	template <typename...> class U, 
+	template <typename... T1> typename T,
+	template <typename...> typename U,
 	typename... T1
 >
 struct is_a<T<T1...>, U> {
 	template <
-		template <typename... Y1> class Y, 
-		template <typename...> class X, 
+		template <typename... Y1> typename Y,
+		template <typename...> typename X,
 		typename... Y1
 	>
-    static auto check(int const*) 
-		-> typename std::conditional_t<std::is_same_v< X<Y1...>, Y<Y1...> >, 
-				std::true_type, std::false_type>;
+    static auto check(int const*) -> typename std::bool_constant< std::is_same_v< X<Y1...>, Y<Y1...> > >;
     
 	template <
-		template <typename...> class, 
-		template <typename...> class, 
+		template <typename...> typename,
+		template <typename...> typename,
 		typename...
 	>
-    static auto check(...) 
-		-> std::false_type;
+    static auto check(...) -> std::false_type;
     
 	static constexpr bool value = decltype(check<T, U, T1...>(0))::value;
 };

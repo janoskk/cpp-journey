@@ -5,24 +5,24 @@
 
 template<
     typename T,
-    template <typename...> class
+    template <typename...> typename
 >
 struct filler_s {
     static_assert(sizeof(T) == 0, "Should be used for template type");
 };
 
 template<
-    template <typename... T1> class T,
-    template <typename...> class U,
+    template <typename... T1> typename T,
+    template <typename...> typename U,
     typename... T1
 >
-struct filler_s< T<T1...>, U> {
-    typedef U<T1...> type;
+struct filler_s<T<T1...>, U> {
+    using type = U<T1...>;
 };
 
 template<
     typename T,
-    template <typename...> class U
+    template <typename...> typename U
 >
 using filler = typename filler_s<T, U>::type;
 
