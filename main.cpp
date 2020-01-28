@@ -5,6 +5,9 @@
 #include "filler.h"
 #include "append.h"
 #include "has_property.h"
+#include "either_is_int.h"
+#include "transform.h"
+#include "all_true.h"
 
 int main(int argc, const char * argv[]) {
     test_has_arrow_operator();
@@ -14,6 +17,9 @@ int main(int argc, const char * argv[]) {
     test_filler();
     test_append();
     test_has_property();
+    test_either_is_int();
+    test_transform();
+    test_all_true();
     
     return 0;
 }

@@ -19,14 +19,14 @@ struct has_property_s<T, U, V1...> {
 
 
 void test_has_property() {
-    static_assert(has_property_s<std::is_integral, int>::value == true);
-    static_assert(has_property_s<std::is_integral, int, char>::value == true);
-    static_assert(has_property_s<std::is_floating_point, double, double, const float>::value == true);
+    static_assert(has_property<std::is_integral, int> == true);
+    static_assert(has_property<std::is_integral, int, char> == true);
+    static_assert(has_property<std::is_floating_point, double, double, const float> == true);
 
-    static_assert(has_property_s<std::is_integral, std::tuple<int>>::value == false);
-    static_assert(has_property_s<std::is_integral, int, std::tuple<int>>::value == false);
-    static_assert(has_property_s<std::is_integral, std::tuple<int>, int>::value == false);
-    static_assert(has_property_s<std::is_integral, int, std::tuple<int>, char>::value == false);
+    static_assert(has_property<std::is_integral, std::tuple<int>> == false);
+    static_assert(has_property<std::is_integral, int, std::tuple<int>> == false);
+    static_assert(has_property<std::is_integral, std::tuple<int>, int> == false);
+    static_assert(has_property<std::is_integral, int, std::tuple<int>, char> == false);
 }
 
 #endif /* has_property_h */

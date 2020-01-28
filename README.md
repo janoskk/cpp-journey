@@ -124,7 +124,67 @@ static_assert(has_property_s<std::is_integral, int, char>::value == true);
 static_assert(has_property_s<std::is_integral, int, std::tuple<int>, char>::value == false);
 ```
 
+either_is_int
+--------------
+The `either_is_int` type should define if at least one of the template parameters is `int`.
+Example:
+```
+static_assert(std::is_same_v<either_is_int<float, char>, std::false_type>);
+static_assert(std::is_same_v<either_is_int<float, int, char>, std::true_type>);
+```
+
+all_true
+--------
+With the usage of `bool_pack` implement `all_true` that is defined to `std::true_type` if `(... && bools) == true`, otherwise `std::false_type`.
+```
+template bool...
+struct bool_pack {};
+```
+```
+template bool... bools
+using all_true = ...;
+```
+
+Can you implement it without recursion and C++17 features?
+
+transform
+-----------
+That's a nice one! There is are some examples for the usage of  `transform`. 
+
+```
+using input1 = std::tuple<int, char, double>;
+using expected1 = std::tuple<int*, char*, double*>;
+using result1 = transform<std::add_pointer_t, input1>;
+static_assert(std::is_same_v<result1, expected1>);
+
+using input2_1 = std::tuple<int, char, double>;
+using input2_2 = std::tuple<char, double, int>;
+using expected2 = std::tuple<std::pair<int, char>, std::pair<char, double>, std::pair<double, int>>;
+using result2 = transform<std::pair, input2_1, input2_2>;
+static_assert(std::is_same_v<result2, expected2>);
+
+using input3_1 = list<int, char, double>;
+using input3_2 = std::tuple<char, double, void>;
+using input3_3 = std::tuple<double, int, char>;
+using expected3 = list<std::true_type, std::true_type, std::false_type>;
+using result3 = transform<either_is_int, input3_1, input3_2, input3_3>;
+static_assert(std::is_same_v<result3, expected3>);
+```
+
+Hint: The code could be simplified if you implement first the following helpers:
+```
+//
+// Some helper types:
+// - front        Returns the first type of the list
+// - pop_front    Returns the input list without the fist type
+// - push_front   Returns the concatenate of the first type and a list
+// - assign       Returns the first list with the second list's types
+// - clear        Same as assign<L, list<>>
+// - (is_)empty   Returns std::true_type if at least one list parameter is not empty
+//
+```
+
 License
 ---------
-Copyright © 2020 Szilard Szaloki & Janos Kasza
+Copyright © 2020 Janos Kasza
 This project is MIT licensed.

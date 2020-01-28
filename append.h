@@ -20,7 +20,7 @@ struct append_s<> {
 
 // append<list<int>>
 template<
-    template <typename... T1> typename T,
+    template <typename...> typename T,
     typename... T1
 >
 struct append_s<T<T1...>> {
@@ -29,9 +29,9 @@ struct append_s<T<T1...>> {
 
 // append<list<double>, list<int>, list<int>>
 template<
-    template <typename... T1> typename T,
+    template <typename...> typename T,
     typename... T1,
-    template <typename... U1> typename U,
+    template <typename...> typename U,
     typename... U1,
     typename... V1
 >
