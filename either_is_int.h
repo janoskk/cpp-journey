@@ -3,6 +3,9 @@
 
 #include <type_traits>
 
+//
+// First version - with recursion
+//
 namespace either_is_int_v1 {
 template <typename...>
 struct either_is_int_s;
@@ -22,6 +25,9 @@ struct either_is_int_s<T, U1...> {
 };
 
 
+//
+// Second version - with pack expansion
+//
 template<typename... T1>
 using either_is_int = std::bool_constant<(std::is_same_v<T1, int> || ...)>;
 

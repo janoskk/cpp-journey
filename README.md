@@ -147,9 +147,39 @@ using all_true = ...;
 
 Can you implement it without recursion and C++17 features?
 
+list_library
+-----------
+For some future tasks we need the following helper functions. Implement them.
+```
+// Returns the first type of the list
+template <typename L>
+using front = typename detail::front_impl<L>::type;
+
+// Returns the input list without the fist type
+template <typename L>
+using pop_front = typename detail::pop_front_impl<L>::type;
+
+// Returns the concatenate of the first type and a list
+template <typename L, typename... Ts>
+using push_front = typename detail::push_front_impl<L, Ts...>::type;
+
+// Returns the first list with the second list's types
+template <typename L, typename M>
+using assign = typename detail::assign_impl<L, M>::type;
+
+// Same as assign<L, list<>>
+template <typename L>
+using clear = assign<L, list<>>;
+
+// Returns std::true_type if at least one list parameter is not empty (or Ls... is empty)
+template <typename... Ls>
+using empty = typename detail::empty_impl<Ls...>::type;
+```
+
+
 transform
 -----------
-That's a nice one! There is are some examples for the usage of  `transform`. 
+That's a nice one! Until now this is the most difficult. There are some examples for the usage of  `transform`:
 
 ```
 using input1 = std::tuple<int, char, double>;
@@ -169,20 +199,19 @@ using input3_3 = std::tuple<double, int, char>;
 using expected3 = list<std::true_type, std::true_type, std::false_type>;
 using result3 = transform<either_is_int, input3_1, input3_2, input3_3>;
 static_assert(std::is_same_v<result3, expected3>);
+
+using input4_1 = list<int, char, double>;
+using input4_2 = std::tuple<int*, char*, double*>;
+using input4_3 = std::tuple<int**, char**, double**>;
+using input4_4 = std::tuple<int***, char***, double***>;
+using expected4 = list<std::true_type, std::false_type, std::false_type>;
+using result4 = transform<either_is_int, input4_1, input4_2, input4_3, input4_4>;
+static_assert(std::is_same_v<result4, expected4>);
+
+static_assert(std::is_same_v<transform<std::pair>, list<>>);
 ```
 
-Hint: The code could be simplified if you implement first the following helpers:
-```
-//
-// Some helper types:
-// - front        Returns the first type of the list
-// - pop_front    Returns the input list without the fist type
-// - push_front   Returns the concatenate of the first type and a list
-// - assign       Returns the first list with the second list's types
-// - clear        Same as assign<L, list<>>
-// - (is_)empty   Returns std::true_type if at least one list parameter is not empty
-//
-```
+Hint: The code could be simplified if you implement first the items of the `list_library`.
 
 License
 ---------
