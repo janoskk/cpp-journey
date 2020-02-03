@@ -2,6 +2,7 @@
 #define filler_h
 
 #include <type_traits>
+#include <memory>
 
 template<
     typename T,
