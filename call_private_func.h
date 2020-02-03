@@ -6,6 +6,7 @@
 //
 
 #include <type_traits>
+#include <assert.h>
 
 template <typename T>
 struct caller {

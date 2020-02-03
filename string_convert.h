@@ -6,6 +6,7 @@
 #include <codecvt>
 #include <locale>
 #include <type_traits>
+#include <assert.h>
 
 
 template <typename T>
