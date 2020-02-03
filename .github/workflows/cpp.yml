@@ -1,0 +1,13 @@
+name: C++ CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: build
+      run: clang++ -std=c++17 -Wall -o main main.cpp
