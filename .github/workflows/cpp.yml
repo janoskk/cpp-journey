@@ -9,5 +9,7 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
-    - name: build
+    - name: build clang
       run: clang++ -std=c++17 -Wall -o main main.cpp
+    - name: build g++
+      run: g++ -std=c++17 -Wall -o main main.cpp
