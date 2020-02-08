@@ -213,6 +213,17 @@ static_assert(std::is_same_v<transform<std::pair>, list<>>);
 
 Hint: The code could be simplified if you implement first the items of the `list_library`.
 
+
+index_sequence
+-------------------
+Implement an `index_sequence` type that's similar to `std::integer_sequence` as:
+
+```
+static_assert(std::is_same_v<make_index_sequence<0>, index_sequence<>>);
+static_assert(std::is_same_v<make_index_sequence<5>, index_sequence<0, 1, 2, 3, 4>>);
+```
+
+
 License
 ---------
 Copyright © 2020 Janos Kasza

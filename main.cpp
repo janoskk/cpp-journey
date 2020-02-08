@@ -8,6 +8,7 @@
 #include "either_is_int.h"
 #include "transform.h"
 #include "all_true.h"
+#include "index_sequence.h"
 
 int main(int argc, const char * argv[]) {
     test_has_arrow_operator();
@@ -20,6 +21,7 @@ int main(int argc, const char * argv[]) {
     test_either_is_int();
     test_transform();
     test_all_true();
+    test_index_sequence();
     
     return 0;
 }

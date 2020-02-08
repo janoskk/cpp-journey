@@ -46,7 +46,7 @@ using pop_front = typename detail::pop_front_impl<L>::type;
 
 // push_front
 namespace detail {
-template <typename, typename...>
+template <typename...>
 struct push_front_impl;
 
 template <template <typename...> typename L, typename... Us, typename... Ts>
@@ -55,8 +55,8 @@ struct push_front_impl<L<Ts...>, Us...> {
 };
 }; /* detail */
 
-template <typename L, typename... Ts>
-using push_front = typename detail::push_front_impl<L, Ts...>::type;
+template <typename... Ts>
+using push_front = typename detail::push_front_impl<Ts...>::type;
 
 
 // push_back
