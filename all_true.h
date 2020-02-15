@@ -6,7 +6,8 @@
 //
 // First version - using inheritance and checking whether the `has_false` member is defined or not.
 //
-namespace detail_v1 {
+namespace v1 {
+namespace detail {
 template <bool...>
 struct bool_pack;
 
@@ -39,11 +40,11 @@ struct all_true_impl {
     
     using type = std::bool_constant<has_false<bool_pack<bools...>>::value>;
 };
-}; /* detail_v1 */
+}; /* detail */
 
 template <bool... bools>
-using all_true_v1 = typename detail_v1::all_true_impl<bools...>::type;
-
+using all_true = typename detail::all_true_impl<bools...>::type;
+}; /* v1 */
 
 //
 // Second version - I found a way to generate a bool_pack that is all true and has the same length

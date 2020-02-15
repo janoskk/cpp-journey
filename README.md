@@ -223,6 +223,69 @@ static_assert(std::is_same_v<make_index_sequence<0>, index_sequence<>>);
 static_assert(std::is_same_v<make_index_sequence<5>, index_sequence<0, 1, 2, 3, 4>>);
 ```
 
+Bonus: implement `from_sequence` as:
+```
+static_assert(
+    std::is_same_v<
+        from_sequence<std::index_sequence<0, 1, 2>>,
+        list<std::integral_constant<std::size_t, 0>, std::integral_constant<std::size_t, 1>, std::integral_constant<std::size_t, 2>>
+    >
+);
+static_assert(
+    std::is_same_v<
+        from_sequence<std::integer_sequence<int, 0, 1, 2>>,
+        list<std::integral_constant<int, 0>, std::integral_constant<int, 1>, std::integral_constant<int, 2>>
+    >
+);
+```
+
+tuple_cat
+-----------
+Implement a `my_tuple_cat` function that's similar to `std::tuple_cat`. Use the `print` defined at (cppreference.com)[https://en.cppreference.com/w/cpp/utility/tuple/tuple_cat].
+
+```template<typename... Args>
+void print(const std::tuple<Args...>& t) { ... }
+```
+
+It's challenging!
+
+```
+static_assert(std::is_same_v<decltype(std::tuple_cat()), decltype(my_tuple_cat())>);
+
+auto expected0 = std::tuple_cat(std::tuple{}, std::tuple{});
+auto result0 = my_tuple_cat(std::tuple{}, std::tuple{});
+
+static_assert(std::is_same_v<decltype(expected0), decltype(result0)>);
+print(expected0);
+print(result0);
+
+auto input1_1 = std::make_tuple(1, "foo", 2, "bar");
+auto expected1 = std::tuple_cat(input1_1);
+auto result1 = my_tuple_cat(input1_1);
+
+static_assert(std::is_same_v<decltype(expected1), decltype(result1)>);
+print(expected1);
+print(result1);
+
+auto input2_1 = std::make_tuple(1, "foo", 2, "bar");
+auto input2_2 = std::make_tuple("asd", 3.14);
+auto expected2 = std::tuple_cat(input2_1, input2_2);
+auto result2 = my_tuple_cat(input2_1, input2_2);
+
+static_assert(std::is_same_v<decltype(expected2), decltype(result2)>);
+print(expected2);
+print(result2);
+
+auto input3_1 = std::make_tuple(1, "foo", 2, "bar");
+auto input3_2 = std::make_tuple("asd", 3.14);
+auto input3_3 = std::make_tuple("asdfg", 3.1415);
+auto expected3 = std::tuple_cat(input3_1, input3_2, input3_3);
+auto result3 = my_tuple_cat(input3_1, input3_2, input3_3);
+
+static_assert(std::is_same_v<decltype(expected3), decltype(result3)>);
+print(expected3);
+print(result3);
+```
 
 License
 ---------

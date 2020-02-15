@@ -12,6 +12,7 @@
 // - assign       L<Ts...>, L<Us...> -> L<Xs...> // Returns the first list with the second list's types
 // - clear        L<Ts...> -> L<Xs...>           // Same as assign<L, list<>>
 // - (is_)empty   Ls... -> bool_constant         // Returns std::true_type if at least one list parameter is not empty
+// - fill         L<Ts...>, U -> L<Xs...>        // Replaces Ts... to U's
 //
 
 // front
@@ -116,6 +117,25 @@ static_assert(std::is_same_v<empty<list<>>, std::true_type>);
 static_assert(std::is_same_v<empty<list<>, list<>>, std::true_type>);
 static_assert(std::is_same_v<empty<list<int>>, std::false_type>);
 static_assert(std::is_same_v<empty<list<>, list<int>>, std::false_type>);
+
+
+// fill
+namespace detail {
+template<typename T, typename U>
+struct fill;
+
+template<template <typename...> typename T, typename... Ts, typename U>
+struct fill<T<Ts...>, U> {
+    using type = T<std::conditional_t<true, U, Ts>...>;
+};
+}; /* detail */
+
+template<typename T, typename U>
+using fill = typename detail::fill<T, U>::type;
+
+
+static_assert(std::is_same_v<fill<list<int, char, double>, short>, list<short, short, short>>);
+
 
 
 #endif /* list_library_h */
