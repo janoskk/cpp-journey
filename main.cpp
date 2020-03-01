@@ -10,6 +10,7 @@
 #include "all_true.h"
 #include "index_sequence.h"
 #include "tuple_cat.h"
+#include "which_base.h"
 
 int main(int argc, const char * argv[]) {
     test_has_arrow_operator();
@@ -24,6 +25,7 @@ int main(int argc, const char * argv[]) {
     test_all_true();
     test_index_sequence();
     test_tuple_cat();
+    test_which_base();
     
     return 0;
 }

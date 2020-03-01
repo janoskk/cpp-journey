@@ -122,17 +122,16 @@ static_assert(std::is_same_v<empty<list<>, list<int>>, std::false_type>);
 // fill
 namespace detail {
 template<typename T, typename U>
-struct fill;
+struct fill_impl;
 
 template<template <typename...> typename T, typename... Ts, typename U>
-struct fill<T<Ts...>, U> {
+struct fill_impl<T<Ts...>, U> {
     using type = T<std::conditional_t<true, U, Ts>...>;
 };
 }; /* detail */
 
 template<typename T, typename U>
-using fill = typename detail::fill<T, U>::type;
-
+using fill = typename detail::fill_impl<T, U>::type;
 
 static_assert(std::is_same_v<fill<list<int, char, double>, short>, list<short, short, short>>);
 
