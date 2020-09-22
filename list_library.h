@@ -13,6 +13,7 @@
 // - clear        L<Ts...> -> L<Xs...>           // Same as assign<L, list<>>
 // - (is_)empty   Ls... -> bool_constant         // Returns std::true_type if at least one list parameter is not empty
 // - fill         L<Ts...>, U -> L<Xs...>        // Replaces Ts... to U's
+// - first        Ts... -> T                     // Returns the first element of the param list
 //
 
 // front
@@ -135,6 +136,13 @@ using fill = typename detail::fill_impl<T, U>::type;
 
 static_assert(std::is_same_v<fill<list<int, char, double>, short>, list<short, short, short>>);
 
+// first
+template <typename T, typename...>
+struct first_impl {
+    using type = T;
+};
 
+template <typename... Ts>
+using first = typename first_impl<Ts...>::type;
 
 #endif /* list_library_h */

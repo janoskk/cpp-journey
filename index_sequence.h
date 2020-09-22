@@ -66,6 +66,13 @@ template <template <typename TT, TT...> typename T, typename TT>
 struct from_sequence_impl<T<TT>> {
     using type = list<>;
 };
+
+// for index_sequence
+template <size_t... Values>
+struct from_sequence_impl<index_sequence<Values...>> {
+    using type = list<std::integral_constant<size_t, Values>...>;
+};
+
 }; /* detail */
 
 template<typename T>
@@ -86,6 +93,12 @@ void test_index_sequence() {
         std::is_same_v<
             from_sequence<std::integer_sequence<int, 0, 1, 2>>,
             list<std::integral_constant<int, 0>, std::integral_constant<int, 1>, std::integral_constant<int, 2>>
+        >
+    );
+    static_assert(
+        std::is_same_v<
+            from_sequence<index_sequence<0, 1, 2>>,
+            list<std::integral_constant<std::size_t, 0>, std::integral_constant<std::size_t, 1>, std::integral_constant<std::size_t, 2>>
         >
     );
 }

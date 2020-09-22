@@ -10,6 +10,7 @@
 #include "all_true.h"
 #include "index_sequence.h"
 #include "tuple_cat.h"
+#include "tuple_cat_2.h"
 #include "which_base.h"
 
 int main(int argc, const char * argv[]) {
@@ -25,6 +26,7 @@ int main(int argc, const char * argv[]) {
     test_all_true();
     test_index_sequence();
     test_tuple_cat();
+    test_tuple_cat_2();
     test_which_base();
     
     return 0;

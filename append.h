@@ -4,7 +4,7 @@
 #include <type_traits>
 
 template <typename...>
-struct list;
+struct list{};
 
 template <typename...>
 struct append_s;
