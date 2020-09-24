@@ -6,8 +6,6 @@
 #include "list_library.h"
 #include "index_sequence.h"
 
-struct end_of_list;
-
 // make_constant_sequence
 namespace detail {
 template<size_t i, size_t j, size_t... js>
@@ -26,6 +24,8 @@ using make_constant_sequence = typename detail::make_constant_sequence_impl<i, j
 
 namespace detail
 {
+struct end_of_list;
+
 template <size_t N, typename T, typename... Us>
 struct double_index
 {
@@ -42,26 +42,26 @@ struct double_index<N, T, end_of_list>
 };
 
 template <typename return_t, typename... Ts, typename... Us, typename Tuples>
-return_t tuple_cat_helper(list<Ts...>, list<Us...>, Tuples&& tuples)
+return_t tuple_cat_helper(list<Ts...>&&, list<Us...>&&, Tuples&& tuples)
 {
-    // static_assert(std::is_same_v<Tuples, int>);
+    // static_assert(std::is_same_v<decltype(tuples), int>);
     return return_t{std::get<Ts::value>(std::get<Us::value>(std::forward<Tuples>(tuples)))...};
 }
 } /* detail */
 
-template <typename... Ts, typename return_t = append<std::tuple<>, append<std::remove_reference_t<Ts>...>> >
+template <typename... Ts, typename return_t = append<std::tuple<>, std::remove_cv_t<std::remove_reference_t<Ts>>...> >
 return_t my_tuple_cat_2(Ts&&... ts)
 {
-    //static_assert(std::is_same_v<return_t, int>);
+    // static_assert(std::is_same_v<return_t, int>);
 
-    using doubles = detail::double_index<0, std::remove_reference_t<Ts>..., end_of_list>;
+    using doubles = detail::double_index<0, std::remove_reference_t<Ts>..., detail::end_of_list>;
     // static_assert(std::is_same_v<typename doubles::first, int>);
     // static_assert(std::is_same_v<typename doubles::second, int>);
 
     auto ts_union = std::forward_as_tuple(std::forward<Ts>(ts)...);
-    //static_assert(std::is_same_v<decltype(ts_union), int>);
+    // static_assert(std::is_same_v<decltype(ts_union), int>);
     
-    return detail::tuple_cat_helper<return_t>(typename doubles::first{}, typename doubles::second{}, ts_union);
+    return detail::tuple_cat_helper<return_t>(typename doubles::first{}, typename doubles::second{}, std::move(ts_union));
 }
 
 
@@ -73,7 +73,7 @@ void test_tuple_cat_2() {
     
     static_assert(std::is_same_v<decltype(expected0), decltype(result0)>);
 
-    auto input1_1 = std::make_tuple(1, "foo", 2, "bar");
+    auto const input1_1 = std::make_tuple(1, "foo", 2, "bar");
     auto expected1 = std::tuple_cat(input1_1);
     auto result1 = my_tuple_cat_2(input1_1);
     
