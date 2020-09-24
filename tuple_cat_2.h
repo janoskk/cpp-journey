@@ -24,21 +24,19 @@ using make_constant_sequence = typename detail::make_constant_sequence_impl<i, j
 
 namespace detail
 {
-struct end_of_list;
-
-template <size_t N, typename T, typename... Us>
+template <size_t N, typename... Us>
 struct double_index
 {
-    using others = double_index<N+1, Us...>;
-    using first =  append<from_sequence<std::make_index_sequence<std::tuple_size_v<std::decay_t<T>>>>, typename others::first>;
-    using second = append<from_sequence<make_constant_sequence<std::tuple_size_v<std::decay_t<T>>, N>>, typename others::second>;
+    using first = list<>;
+    using second = list<>;
 };
 
-template <size_t N, typename T>
-struct double_index<N, T, end_of_list>
+template <size_t N, typename T, typename... Us>
+struct double_index<N, T, Us...>
 {
-    using first = from_sequence<std::make_index_sequence<std::tuple_size_v<T>>>;
-    using second = from_sequence<make_constant_sequence<std::tuple_size_v<T>, N>>;
+    using others = double_index<N+1, Us...>;
+    using first =  append<from_sequence<std::make_index_sequence<std::tuple_size_v<T>>>, typename others::first>;
+    using second = append<from_sequence<make_constant_sequence<std::tuple_size_v<T>, N>>, typename others::second>;
 };
 
 template <typename return_t, typename... Ts, typename... Us, typename Tuples>
@@ -54,7 +52,7 @@ return_t my_tuple_cat_2(Ts&&... ts)
 {
     // static_assert(std::is_same_v<return_t, int>);
 
-    using doubles = detail::double_index<0, std::remove_reference_t<Ts>..., detail::end_of_list>;
+    using doubles = detail::double_index<0, std::remove_cv_t<std::remove_reference_t<Ts>>...>;
     // static_assert(std::is_same_v<typename doubles::first, int>);
     // static_assert(std::is_same_v<typename doubles::second, int>);
 
