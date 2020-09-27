@@ -1,20 +1,20 @@
 #ifndef append_h
 #define append_h
 
+#include <tuple>
 #include <type_traits>
 
 template <typename...>
 struct list{};
 
+namespace detail
+{
 template <typename...>
-struct append_s;
-
-template <typename... T1>
-using append = typename append_s<T1...>::type;
+struct append_impl;
 
 // append<>
 template<>
-struct append_s<> {
+struct append_impl<> {
     using type = list<>;
 };
 
@@ -23,10 +23,9 @@ template<
     template <typename...> typename T,
     typename... T1
 >
-struct append_s<T<T1...>> {
+struct append_impl<T<T1...>> {
     using type = T<T1...>;
 };
-
 
 // append<list<double>, list<int>, list<int>>
 template<
@@ -36,9 +35,14 @@ template<
     typename... U1,
     typename... V1
 >
-struct append_s<T<T1...>, U<U1...>, V1...> {
-    using type = append<T<T1..., U1...>, V1...>;
+struct append_impl<T<T1...>, U<U1...>, V1...> {
+    using type = typename append_impl<T<T1..., U1...>, V1...>::type;
 };
+} /* detail */
+
+
+template <typename... T1>
+using append = typename detail::append_impl<T1...>::type;
 
 
 void test_append() {
